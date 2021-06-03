@@ -1,7 +1,7 @@
-DROP DATABASE IF EXISTS raffledb;
+-- DROP DATABASE IF EXISTS raffledb;
 CREATE DATABASE raffledb;
 
-\c raffledb
+-- \c raffledb
 
 CREATE TABLE users (
   id SERIAL PRIMARY KEY,
