@@ -7,13 +7,17 @@
     "node": "12.13.0"
   },
   "scripts": {
-    "seed": "cat seed.sql | heroku pg:psql",
     "start": "node index.js",
-    "test": "jest"
+    "start-dev": "node index.js",
+    "migrate:reset": "cat db/seedtest.sql | psql",
+    "test": "$(npm bin)/jest --coverage && cat ./coverage/lcov.info | $(npm bin)/coveralls cross-env NODE_ENV=test jest --testTimeout=10000",
+    "write-coveralls": "rm -rf .coveralls.yml && echo \"repo_token:$CODE_COVERAGE_TOKEN\" >> .coveralls.yml",
+    "pretest": "cross-env NODE_ENV=test npm run migrate:reset"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "coveralls": "^3.1.0",
     "express": "^4.17.1",
     "jest": "^27.0.4",
     "pg": "^8.6.0",
@@ -21,6 +25,7 @@
     "supertest": "^6.1.3"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "nodemon": "^2.0.7"
   }
 }
