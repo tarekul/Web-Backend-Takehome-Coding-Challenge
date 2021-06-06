@@ -35,7 +35,16 @@ app.get("/:id", (req, res) => {
 
 app.get("/:id/participants", (req, res) => {
   const { id } = req.params;
-  raffleService.readParticipants(id).then((response) => res.json(response));
+  const { email } = req.query;
+
+  raffleService.readParticipants(id).then((response) => {
+    if (email) {
+      const filterEmail = response.filter((p) =>
+        p.email === email ? true : false
+      );
+      res.json(filterEmail);
+    } else res.json(response);
+  });
 });
 
 app.post("/:id/participants", (req, res) => {

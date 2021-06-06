@@ -6,6 +6,10 @@ raffleService.readRaffles = () => {
   return db.any("SELECT * FROM raffles");
 };
 
+raffleService.readUsers = () => {
+  return db.any("SELECT * FROM users");
+};
+
 raffleService.readActiveRaffles = () => {
   return db.any("SELECT * FROM raffles WHERE winner_id IS NOT NULL");
 };
