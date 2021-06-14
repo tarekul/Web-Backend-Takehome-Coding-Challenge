@@ -27,8 +27,16 @@ raffleService.readParticipant = (id) => {
 };
 
 raffleService.readParticipants = (raffle_id) => {
-  return db.any("SELECT * FROM users WHERE raffle_id=${raffle_id}", {
-    raffle_id,
+  const participants = [];
+  const int_raffle_id = parseInt(raffle_id);
+  return raffleService.readUsers().then((users) => {
+    users.forEach((user) => {
+      console.log(user.raffle_ids.includes(int_raffle_id));
+      if (user.raffle_ids.includes(int_raffle_id)) participants.push(user);
+    });
+
+    console.log(participants);
+    return participants;
   });
 };
 
@@ -40,7 +48,7 @@ raffleService.createRaffle = (name, secret_token, created_at) => {
 };
 
 raffleService.createParticipant = (
-  raffle_id,
+  raffle_ids,
   firstName,
   lastName,
   email,
@@ -48,8 +56,8 @@ raffleService.createParticipant = (
   registered_at
 ) => {
   return db.none(
-    "INSERT INTO users (raffle_id, firstName, lastName,email,phone,registered_at) VALUES (${raffle_id}, ${firstName}, ${lastName}, ${email}, ${phone}, ${registered_at})",
-    { raffle_id, firstName, lastName, email, phone, registered_at }
+    "INSERT INTO users (raffle_ids, firstName, lastName,email,phone,registered_at) VALUES (${raffle_ids}, ${firstName}, ${lastName}, ${email}, ${phone}, ${registered_at})",
+    { raffle_ids, firstName, lastName, email, phone, registered_at }
   );
 };
 

@@ -47,9 +47,10 @@ app.get("/:id/participants", (req, res) => {
   });
 });
 
-app.post("/:id/participants", (req, res) => {
-  const { id } = req.params;
-  const { firstname, lastname, email, phone } = req.body;
+app.post("/participants", (req, res) => {
+  const { firstname, lastname, email, phone, raffles } = req.body;
+  if (!Array.isArray(raffles))
+    res.status(400).json({ error: "raffle ids must be array" });
 
   if (!isEmpty(firstname) || !isEmpty(lastname) || !isEmpty(email))
     return res
@@ -64,7 +65,7 @@ app.post("/:id/participants", (req, res) => {
       .status(400)
       .json({ error: "incorrectly formatted phone number" });
   raffleService
-    .createParticipant(id, firstname, lastname, email, phone, new Date())
+    .createParticipant(raffles, firstname, lastname, email, phone, new Date())
     .then(() => res.status(200).json({ message: "Success" }))
     .catch((err) => res.status(500).json(err.toString()));
 });
